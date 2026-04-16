@@ -378,7 +378,7 @@ const SnapPreview: React.FC<{ snapType: 'LEFT' | 'RIGHT' | 'MAX' | null }> = ({ 
     return React.createElement('div', { className: 'snap-preview', style });
 };
 
-const WindowFrame: React.FC<{ window: WindowInstance, setSnapPreview: (type: 'LEFT' | 'RIGHT' | 'MAX' | null) => void, isLinked: boolean }> = ({ window: w, setSnapPreview, isLinked }) => {
+const WindowFrame: React.FC<{ window: WindowInstance, setSnapPreview: (type: 'LEFT' | 'RIGHT' | 'MAX' | null) => void, isLinked: boolean }> = React.memo(({ window: w, setSnapPreview, isLinked }) => {
     const handleMouseDown = (e: React.PointerEvent) => {
         e.stopPropagation();
         focusWindow(w.instanceId);
@@ -655,7 +655,7 @@ const WindowFrame: React.FC<{ window: WindowInstance, setSnapPreview: (type: 'LE
             w.showAizaDrawer && React.createElement(AizaNeuralPresence, { instance: w })
         )
     );
-};
+});
 
 // MINI WINDOW PREVIEW COMPONENT
 const TaskPreview: React.FC<{ app: AppDef, windowTitle?: string, isRunning: boolean }> = ({ app, windowTitle, isRunning }) => {
@@ -682,7 +682,7 @@ const TaskPreview: React.FC<{ app: AppDef, windowTitle?: string, isRunning: bool
     );
 };
 
-const Taskbar: React.FC<{ windows: WindowInstance[], onOpenApp: (id: string) => void, onToggleAudio: () => void, audioEnabled: boolean }> = ({ windows, onOpenApp, onToggleAudio, audioEnabled }) => {
+const Taskbar: React.FC<{ windows: WindowInstance[], onOpenApp: (id: string) => void, onToggleAudio: () => void, audioEnabled: boolean }> = React.memo(({ windows, onOpenApp, onToggleAudio, audioEnabled }) => {
     const [time, setTime] = useState(new Date());
     // Use the custom hook to subscribe to state changes efficiently
     const state = useAppStore(s => s);
@@ -846,14 +846,14 @@ const Taskbar: React.FC<{ windows: WindowInstance[], onOpenApp: (id: string) => 
             .dock-icon.focused { border-color: rgba(0,255,204,0.3) !important; background: rgba(0,255,204,0.05) !important; }
         `)
     );
-};
+});
 
 // --- DESKTOP GRID SYSTEM ---
 const DesktopGrid: React.FC<{ 
     apps: AppDef[], 
     desktopAppIds: string[], 
     onOpen: (id: string) => void 
-}> = ({ apps, desktopAppIds, onOpen }) => {
+}> = React.memo(({ apps, desktopAppIds, onOpen }) => {
     const [contextMenu, setContextMenu] = useState<{ x: number, y: number, appId: string } | null>(null);
     const [editMode, setEditMode] = useState(false);
     const longPressTimer = useRef<any>(null);
@@ -942,7 +942,7 @@ const DesktopGrid: React.FC<{
             .ctx-item:hover { background: rgba(0,255,204,0.1); color: #00ffcc; }
         `)
     );
-};
+});
 
 const App: React.FC = () => {
     // Leverage the new Zustand hook for optimized rendering

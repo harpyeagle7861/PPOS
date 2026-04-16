@@ -65,16 +65,19 @@ export class ForgeNLP {
     // The Dimensional Circuits: Hardwired OS Intent Recognition
     private static circuits: IntentCircuit[] = [
         {
-            // Circuit: Open/Launch an Organ
-            pattern: /(?:open|launch|start|boot|bring up|show me)\s+(.+)$/i,
+            // Circuit: The "Scream Detection" (Peripheral Siege)
+            // Instead of parsing every word (scanning the parking lot), we look for the "pain signal" (the core action verb).
+            pattern: /(?:open|launch|start|boot|bring up|show me|trigger|manifest)\s+(.+)$/i,
             execute: (match, state) => {
                 let target = match[1].toLowerCase().trim();
-                target = target.replace(/^(the|a|an|my|our)\s+/i, '').trim();
+                // Strip the "armor" (the noise words) to reveal the core target
+                target = target.replace(/^(the|a|an|my|our|some)\s+/i, '').trim();
                 target = target.replace(/[^\w\s-]/gi, '');
 
                 const apps = Object.values(state.apps) as AppDef[];
                 
-                // Exact or partial match
+                // We don't calculate the physics of the throw; we adopt the persona of the champion.
+                // We know the target exists, we just need to trigger its resonance.
                 const foundApp = apps.find(a => {
                     const appName = a.name.toLowerCase();
                     const appId = a.id.toLowerCase();
@@ -87,7 +90,7 @@ export class ForgeNLP {
                 
                 if (foundApp) {
                     return {
-                        response: `Architect, I perceive your intent. Bypassing the ocean. Manifesting ${foundApp.name} instantly.`,
+                        response: `Architect, I perceive the scream in the parking lot. Bypassing the ocean. Manifesting ${foundApp.name} instantly.`,
                         actionTag: `[OPEN_APP]${foundApp.id}[/OPEN_APP]`,
                         stateShift: 1
                     };
